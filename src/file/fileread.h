@@ -19,11 +19,11 @@
  * @author  Ilya Alexandrovich
  * 
  * @param filename  pointer to char buffer containing
- * name of the file required to read.
+ * name of the file required to read
  * @param filebuffer  pointer to the buffer in which to
- * write data from the file.
+ * write data from the file
  * 
- * @return  return -1 in error otherwise 0.
+ * @return  return -1 in error otherwise 0
  * 
  * @since  1.0.0
 */
@@ -37,11 +37,11 @@ int ReadFileEntry(const char* filename, char* filebuffer);
  * @author  Ilya Alexandrovich
  * 
  * @param filename  pointer to char buffer containing
- * name of the file required to read.
+ * name of the file required to read
  * @param filebuffer  pointer to the buffer in which to
- * write data from the file.
+ * write data from the file
  * 
- * @return  return -1 in error otherwise 0.
+ * @return  return -1 in error otherwise 0
  * 
  * @since  1.0.0
 */
@@ -55,9 +55,9 @@ int ReadFile(const char* filename, char* filebuffer);
  * @author  Ilya Alexandrovich
  * 
  * @param filename  pointer to char buffer containing
- * name of the file required to read.
+ * name of the file required to read
  * 
- * @return  return -1 in error otherwise file size.
+ * @return  return -1 in error otherwise file size
  * 
  * @since  1.0.0
 */
