@@ -15,8 +15,8 @@ int main(int argc, char** argv)
         // -E or --exec argument handling.
         if(strcmp(argv[counter], "-E") || strcmp(argv[counter], "--exec"))
         {
-            strncpy(executablename, argv[counter + 1], MAX_FILE_NAME_LENGTH);
             ++counter;
+            strncpy(executablename, argv[counter], MAX_FILE_NAME_LENGTH);
         }
         // -SL --show-less argument handling.
         else if(strcmp(argv[counter], "-SL") || strcmp(argv[counter], "--show-less"))
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     }
 
 
-    
+
 }
 
 
@@ -50,4 +50,44 @@ int main(int argc, char** argv)
 static void ShowHelpText()
 {
     printf(helptext, versionstring);
+}
+
+
+
+void TryExecuteViewer(char* const filename)
+{
+    // Get file size.
+    unsigned long long filesize = GetFileSize(filename);
+    if((filesize = GetFileSize(filename)) == -1)
+    {
+        return;
+    }
+
+    // If file size is less than NUMBER_OF_BYTES_IN_ENTRY exit.
+    if(filesize <= NUMBER_OF_BYTES_IN_ENTRY)
+    {
+        return;
+    }
+
+    // Read entry part of the file.
+    char entrybuffer[NUMBER_OF_BYTES_IN_ENTRY + 1];
+    if(ReadFileEntry(filename, entrybuffer) == -1)
+    {
+        return;
+    }
+
+    // Check file type. Its always faster to do what extension say
+    // but we still checking file type(magic number) anyway.
+    if(GetFileExtension(filename) == exe)
+    {
+        if(bIsFilePEExecutable(entrybuffer))
+        {
+            
+        }
+    }
+    else{
+        return;
+    }
+
+
 }

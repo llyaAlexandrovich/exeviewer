@@ -239,3 +239,21 @@ void FillOutNTDataDirectoryHeaderHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE
         MAKELONG(MAKEWORD(buffer[offset + 4], buffer[offset + 5]), MAKEWORD(buffer[offset + 6], buffer[offset + 7]));
     }
 }
+
+
+
+void FillOutDataSection(IMAGE_DOS_HEADER* idh, char* buffer, void* inh, int arch, IMAGE_SECTION_HEADER* ish)
+{
+    if(arch == IMAGE_PE_TYPE) //x32
+    {
+        // Offset + PE magic 4 bytes + IMAGE_OPTIONAL_HEADER32 size.
+        long offset = idh->e_lfanew + 4 + IMAGE_SIZEOF_OPTIONAL_HEADER32;
+
+        
+    }
+    else if(arch == IMAGE_PEP_TYPE) //x64
+    {
+        // Offset + PE magic 4 bytes + IMAGE_OPTIONAL_HEADER64 size.
+        long offset = idh->e_lfanew + 4 + IMAGE_SIZEOF_OPTIONAL_HEADER32;
+    }
+}

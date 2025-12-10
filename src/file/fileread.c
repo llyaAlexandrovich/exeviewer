@@ -7,7 +7,7 @@
 
 
 
-int ReadFileEntry(const char* filename, char* filebuffer)
+int ReadFileEntry(char* const filename, char* filebuffer)
 {
     FILE* fd = fopen(filename, "rb"); // Getting file descriptor.
     if(fd == -1)
@@ -28,7 +28,7 @@ int ReadFileEntry(const char* filename, char* filebuffer)
 
 
 
-int ReadFile(const char* filename, char* filebuffer)
+int ReadFile(char* const filename, char* filebuffer)
 {
     unsigned long long size = GetFileSize(filename); // Getting file size.
     if(size == -1)
@@ -55,7 +55,7 @@ int ReadFile(const char* filename, char* filebuffer)
 
 
 
-unsigned long long GetFileSize(const char* filename)
+unsigned long long GetFileSize(char* const filename)
 {
     FILE* fd = fopen(filename, "rb"); // Getting file descriptor.
     if(fd == -1)
@@ -70,4 +70,23 @@ unsigned long long GetFileSize(const char* filename)
     fclose(fd); // Closing file descriptor.
 
     return size;
+}
+
+
+
+int GetFileExtension(char* const filename)
+{
+    short filenamesize = sizeof(filename);
+
+    short counter = filenamesize;
+    for(; filename[counter] != '.'; --counter);
+
+    if(strcmp(&filename[counter], "exe"))
+    {
+        return exe;
+    }
+    else
+    {
+        return unrecognized;
+    }
 }

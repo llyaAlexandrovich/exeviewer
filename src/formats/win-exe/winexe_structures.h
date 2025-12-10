@@ -6,15 +6,14 @@
 
 
 #include "../../types.h"
+#include "winexe_consts.h"
 
 
-
-#define IMAGE_NUMBEROF_DIRECTORY_ENTRIES 16
 
 
 
 /**
- * DOS header structure. Actually a old useless stub.
+ * DOS header structure. Actually old useless stub.
  * 
  * @param e_magic  magic number
  * @param e_cblp  bytes on last page of file
@@ -247,7 +246,7 @@ typedef struct _IMAGE_OPTIONAL_HEADER
 /**
  * COFF header structure.
  * 
- * @param Machine  machine type.
+ * @param Machine  machine type
  * @param NumberOfSections  the number of sections
  * @param TimeDateStamp  the low 32 bits of the number of seconds since epoch
  * @param PointerToSymbolTable  the file offset of the COFF symbol table
@@ -284,3 +283,37 @@ typedef struct _IMAGE_DATA_DIRECTORY
     DWORD   VirtualAddress;
     DWORD   Size;
 } IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
+
+
+
+/**
+ * Image Section structure.
+ * 
+ * @param Name
+ * @param Misc
+ * @param VirtualAddress
+ * @param SizeOfRawData
+ * @param PointerToRawData
+ * @param PointerToRelocations
+ * @param PointerToLinenumbers
+ * @param NumberOfRelocations
+ * @param NumberOfLinenumbers
+ * @param Characteristics
+ * 
+ * @since 1.0.0
+ */
+typedef struct _IMAGE_SECTION_HEADER {
+    BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];
+    union {
+            DWORD   PhysicalAddress;
+            DWORD   VirtualSize;
+    } Misc;
+    DWORD   VirtualAddress;
+    DWORD   SizeOfRawData;
+    DWORD   PointerToRawData;
+    DWORD   PointerToRelocations;
+    DWORD   PointerToLinenumbers;
+    WORD    NumberOfRelocations;
+    WORD    NumberOfLinenumbers;
+    DWORD   Characteristics;
+} IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
