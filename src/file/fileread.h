@@ -58,7 +58,7 @@ int ReadFile(char* const filename, char* filebuffer);
  * @param filename  pointer to char buffer containing
  * name of the file required to read
  * 
- * @return return -1 in error otherwise file size
+ * @return return 0 in error otherwise file size
  * 
  * @since 1.0.0
 */

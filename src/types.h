@@ -10,8 +10,9 @@
 #endif
 
 
-#define NUMBER_OF_BYTES_IN_ENTRY 80
-#define MAX_FILE_NAME_LENGTH     60
+#define NUMBER_OF_BYTES_IN_ENTRY 80 // Precomputed constant. Represents minimum size of data to process execution.
+#define NUMBER_OF_BYTES_IN_FILE  0xc350 // Minimum required file length(50.000 bytes).
+#define MAX_FILE_NAME_LENGTH     60 // Maximum supported length of the file name.
 
 
 // Windows-compatible types.
@@ -61,7 +62,8 @@ static const enum ESupportedTypes
  * 
  * @author Ilya Alexandrovich
  * 
- * 
+ * @param unrecognized  unrecognized extension
+ * @param exe  standart Windows executable(x32|x64)
  * 
  * @since 1.0.0
  */

@@ -60,7 +60,7 @@ unsigned long long GetFileSize(char* const filename)
     FILE* fd = fopen(filename, "rb"); // Getting file descriptor.
     if(fd == -1)
     {
-        return (unsigned long long)-1;
+        return (unsigned long long)0;
     }
 
     fseek(fd, 0, SEEK_END); // Processing file size.

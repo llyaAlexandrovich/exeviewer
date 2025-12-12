@@ -10,6 +10,7 @@
 
 
 #include "types.h"
+#include "execute.h"
 #include "file/fileread.h"
 #include "format/format.h"
 #include "formats/win-exe/winexe.h"
@@ -65,16 +66,3 @@ static bool supportcheck = false;
  * @since 1.0.0
 */
 static void ShowHelpText();
-
-
-
-/**
- * Trying to start exeviewer on specified file.
- * 
- * @author Ilya Alexandrovich
- * 
- * @param filename  file name to try exeviewer on
- * 
- * @since 1.0.0
- */
-void TryExecuteViewer(char* const filename);
