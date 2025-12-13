@@ -3,12 +3,26 @@
 
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <malloc.h>
 
 
-#include "types.h"
-#include "formats/win-exe/winexe.h"
-#include "file/fileread.h"
+#include "../types.h"
+#include "../exeviewer/exeviewer.h"
+#include "../formats/win-exe/winexe.h"
+#include "../file/fileread.h"
 
+
+typedef struct _PEExecutablesData
+{
+    IMAGE_DOS_HEADER* idh;
+    bool       doshowless;
+    bool     supportcheck;
+    char*          buffer;
+    char*        filename;
+    void*             inh;
+    int              arch;
+} PEExecutablesData;
 
 
 
@@ -19,9 +33,11 @@
  * 
  * @param filename  file name to try exeviewer on
  * 
+ * @return return -1 in error, 0 in success 1 if file was not recognized
+ * 
  * @since 1.0.0
  */
-void TryExecuteViewer(char* const filename);
+int TryExecuteViewer(char* const filename, bool doshowless, bool supportcheck);
 
 
 
@@ -55,3 +71,16 @@ unsigned long long CheckFileSize(char* const filename);
  * @since 1.0.0
  */
 int CheckFileType(char* const filename, char* buffer);
+
+
+
+/**
+ * Get filled information structure of the given file.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param pex  pointer to PEExecutablesData structure
+ * 
+ * @since 1.0.0
+ */
+void GetInfoOfPEExecutable(PEExecutablesData* pex);

@@ -63,110 +63,79 @@ typedef struct _IMAGE_DOS_HEADER
 
 
 /**
- * PE header structure.
+ * COFF header structure.
  * 
- * @param Signature  a 4-byte signature identifying the file as a PE image
- * @param FileHeader  an IMAGE_FILE_HEADER structure
- * @param OptionalHeader  an IMAGE_OPTIONAL_HEADER structure
+ * @param Machine  machine type
+ * @param NumberOfSections  the number of sections
+ * @param TimeDateStamp  the low 32 bits of the number of seconds since epoch
+ * @param PointerToSymbolTable  the file offset of the COFF symbol table
+ * @param NumberOfSymbols  the number of entries in the symbol table
+ * @param SizeOfOptionalHeader  the size of the optional header
+ * @param Characteristics  the flags that indicate the attributes of the file
  * 
  * @since 1.0.0
  */
-typedef struct _IMAGE_NT_HEADERS64
+typedef struct _IMAGE_FILE_HEADER
 {
-    DWORD Signature;
-    IMAGE_FILE_HEADER FileHeader;
-    IMAGE_OPTIONAL_HEADER64 OptionalHeader;
-} IMAGE_NT_HEADERS64, *PIMAGE_NT_HEADERS64;
+    WORD    Machine;
+    WORD    NumberOfSections;
+    DWORD   TimeDateStamp;
+    DWORD   PointerToSymbolTable;
+    DWORD   NumberOfSymbols;
+    WORD    SizeOfOptionalHeader;
+    WORD    Characteristics;
+} IMAGE_FILE_HEADER, *PIMAGE_FILE_HEADER;
 
 
 
 /**
- * PE+ data header structure.
+ * Data Directory structure.
  * 
- * @param Magic  identifies the state of the image file. PE or PE+
- * @param MajorLinkerVersion  the linker major version number
- * @param MinorLinkerVersion  the linker minor version number
- * @param SizeOfCode  the size of the .text section
- * @param SizeOfInitializedData  the size of the initialized data section
- * @param SizeOfUninitializedData  the size of the .bss section
- * @param AddressOfEntryPoint  the address of the entry address
- * @param BaseOfCode  the address of the beginning-of-code section
- * @param ImageBase  the preferred address when loaded into memory
- * @param SectionAlignment  the alignment that is used when in loaded into memory
- * @param FileAlignment  raw alignment that is used to align raw data sections
- * @param MajorOperatingSystemVersion  the major version number of the required operating system
- * @param MinorOperatingSystemVersion  the minor version number of the required operating system
- * @param MajorImageVersion  the major version number of the image
- * @param MinorImageVersion  the minor version number of the image
- * @param MajorSubsystemVersion  the major version number of the subsystem
- * @param MinorSubsystemVersion  the minor version number of the subsystem
- * @param Win32VersionValue  reserved
- * @param SizeOfImage  the size of the image in bytes
- * @param SizeOfHeaders  the size of the DOS and PE headers combined
- * @param CheckSum  image file checksum
- * @param Subsystem  the subsystem that is required to run this image
- * @param DllCharacteristics  Dll characteristics
- * @param SizeOfStackReserve  the size of the stack to reserve
- * @param SizeOfStackCommit  the size of the stack to commit
- * @param SizeOfHeapReserve  the size of the local heap space to reserve
- * @param SizeOfHeapCommit  the size of the local heap space to commit
- * @param LoaderFlags  reserved
- * @param NumberOfRvaAndSizes  the number of data-directory entries in the remainder of the optional header
- * @param DataDirectory  DataDirectory structure
+ * @param VirtualAddress  the address of the table relative to the base 
+ * address of the image when the table is loaded
+ * @param Size  size in bytes
  * 
  * @since 1.0.0
  */
-typedef struct _IMAGE_OPTIONAL_HEADER64
+typedef struct _IMAGE_DATA_DIRECTORY
 {
-    WORD        Magic;
-    BYTE        MajorLinkerVersion;
-    BYTE        MinorLinkerVersion;
-    DWORD       SizeOfCode;
-    DWORD       SizeOfInitializedData;
-    DWORD       SizeOfUninitializedData;
-    DWORD       AddressOfEntryPoint;
-    DWORD       BaseOfCode;
-    ULONGLONG   ImageBase;
-    DWORD       SectionAlignment;
-    DWORD       FileAlignment;
-    WORD        MajorOperatingSystemVersion;
-    WORD        MinorOperatingSystemVersion;
-    WORD        MajorImageVersion;
-    WORD        MinorImageVersion;
-    WORD        MajorSubsystemVersion;
-    WORD        MinorSubsystemVersion;
-    DWORD       Win32VersionValue;
-    DWORD       SizeOfImage;
-    DWORD       SizeOfHeaders;
-    DWORD       CheckSum;
-    WORD        Subsystem;
-    WORD        DllCharacteristics;
-    ULONGLONG   SizeOfStackReserve;
-    ULONGLONG   SizeOfStackCommit;
-    ULONGLONG   SizeOfHeapReserve;
-    ULONGLONG   SizeOfHeapCommit;
-    DWORD       LoaderFlags;
-    DWORD       NumberOfRvaAndSizes;
-    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
-} IMAGE_OPTIONAL_HEADER64, *PIMAGE_OPTIONAL_HEADER64;
+    DWORD   VirtualAddress;
+    DWORD   Size;
+} IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
 
 
 
 /**
- * PE+ header structure.
+ * Image Section structure.
  * 
- * @param Signature  a 4-byte signature identifying the file as a PE image
- * @param FileHeader  an IMAGE_FILE_HEADER structure
- * @param OptionalHeader  an IMAGE_OPTIONAL_HEADER structure
+ * @param Name
+ * @param Misc
+ * @param VirtualAddress
+ * @param SizeOfRawData
+ * @param PointerToRawData
+ * @param PointerToRelocations
+ * @param PointerToLinenumbers
+ * @param NumberOfRelocations
+ * @param NumberOfLinenumbers
+ * @param Characteristics
  * 
  * @since 1.0.0
  */
-typedef struct _IMAGE_NT_HEADERS
-{
-    DWORD Signature;
-    IMAGE_FILE_HEADER FileHeader;
-    IMAGE_OPTIONAL_HEADER32 OptionalHeader;
-} IMAGE_NT_HEADERS32, *PIMAGE_NT_HEADERS32;
+typedef struct _IMAGE_SECTION_HEADER {
+    BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];
+    union {
+            DWORD   PhysicalAddress;
+            DWORD   VirtualSize;
+    } Misc;
+    DWORD   VirtualAddress;
+    DWORD   SizeOfRawData;
+    DWORD   PointerToRawData;
+    DWORD   PointerToRelocations;
+    DWORD   PointerToLinenumbers;
+    WORD    NumberOfRelocations;
+    WORD    NumberOfLinenumbers;
+    DWORD   Characteristics;
+} IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
 
 
 
@@ -244,76 +213,107 @@ typedef struct _IMAGE_OPTIONAL_HEADER
 
 
 /**
- * COFF header structure.
+ * PE+ data header structure.
  * 
- * @param Machine  machine type
- * @param NumberOfSections  the number of sections
- * @param TimeDateStamp  the low 32 bits of the number of seconds since epoch
- * @param PointerToSymbolTable  the file offset of the COFF symbol table
- * @param NumberOfSymbols  the number of entries in the symbol table
- * @param SizeOfOptionalHeader  the size of the optional header
- * @param Characteristics  the flags that indicate the attributes of the file
+ * @param Magic  identifies the state of the image file. PE or PE+
+ * @param MajorLinkerVersion  the linker major version number
+ * @param MinorLinkerVersion  the linker minor version number
+ * @param SizeOfCode  the size of the .text section
+ * @param SizeOfInitializedData  the size of the initialized data section
+ * @param SizeOfUninitializedData  the size of the .bss section
+ * @param AddressOfEntryPoint  the address of the entry address
+ * @param BaseOfCode  the address of the beginning-of-code section
+ * @param ImageBase  the preferred address when loaded into memory
+ * @param SectionAlignment  the alignment that is used when in loaded into memory
+ * @param FileAlignment  raw alignment that is used to align raw data sections
+ * @param MajorOperatingSystemVersion  the major version number of the required operating system
+ * @param MinorOperatingSystemVersion  the minor version number of the required operating system
+ * @param MajorImageVersion  the major version number of the image
+ * @param MinorImageVersion  the minor version number of the image
+ * @param MajorSubsystemVersion  the major version number of the subsystem
+ * @param MinorSubsystemVersion  the minor version number of the subsystem
+ * @param Win32VersionValue  reserved
+ * @param SizeOfImage  the size of the image in bytes
+ * @param SizeOfHeaders  the size of the DOS and PE headers combined
+ * @param CheckSum  image file checksum
+ * @param Subsystem  the subsystem that is required to run this image
+ * @param DllCharacteristics  Dll characteristics
+ * @param SizeOfStackReserve  the size of the stack to reserve
+ * @param SizeOfStackCommit  the size of the stack to commit
+ * @param SizeOfHeapReserve  the size of the local heap space to reserve
+ * @param SizeOfHeapCommit  the size of the local heap space to commit
+ * @param LoaderFlags  reserved
+ * @param NumberOfRvaAndSizes  the number of data-directory entries in the remainder of the optional header
+ * @param DataDirectory  DataDirectory structure
  * 
  * @since 1.0.0
  */
-typedef struct _IMAGE_FILE_HEADER
+typedef struct _IMAGE_OPTIONAL_HEADER64
 {
-    WORD    Machine;
-    WORD    NumberOfSections;
-    DWORD   TimeDateStamp;
-    DWORD   PointerToSymbolTable;
-    DWORD   NumberOfSymbols;
-    WORD    SizeOfOptionalHeader;
-    WORD    Characteristics;
-} IMAGE_FILE_HEADER, *PIMAGE_FILE_HEADER;
+    WORD        Magic;
+    BYTE        MajorLinkerVersion;
+    BYTE        MinorLinkerVersion;
+    DWORD       SizeOfCode;
+    DWORD       SizeOfInitializedData;
+    DWORD       SizeOfUninitializedData;
+    DWORD       AddressOfEntryPoint;
+    DWORD       BaseOfCode;
+    ULONGLONG   ImageBase;
+    DWORD       SectionAlignment;
+    DWORD       FileAlignment;
+    WORD        MajorOperatingSystemVersion;
+    WORD        MinorOperatingSystemVersion;
+    WORD        MajorImageVersion;
+    WORD        MinorImageVersion;
+    WORD        MajorSubsystemVersion;
+    WORD        MinorSubsystemVersion;
+    DWORD       Win32VersionValue;
+    DWORD       SizeOfImage;
+    DWORD       SizeOfHeaders;
+    DWORD       CheckSum;
+    WORD        Subsystem;
+    WORD        DllCharacteristics;
+    ULONGLONG   SizeOfStackReserve;
+    ULONGLONG   SizeOfStackCommit;
+    ULONGLONG   SizeOfHeapReserve;
+    ULONGLONG   SizeOfHeapCommit;
+    DWORD       LoaderFlags;
+    DWORD       NumberOfRvaAndSizes;
+    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+} IMAGE_OPTIONAL_HEADER64, *PIMAGE_OPTIONAL_HEADER64;
 
 
 
 /**
- * Data Directory structure.
+ * PE header structure.
  * 
- * @param VirtualAddress  the address of the table relative to the base 
- * address of the image when the table is loaded
- * @param Size  size in bytes
+ * @param Signature  a 4-byte signature identifying the file as a PE image
+ * @param FileHeader  an IMAGE_FILE_HEADER structure
+ * @param OptionalHeader  an IMAGE_OPTIONAL_HEADER structure
  * 
  * @since 1.0.0
  */
-typedef struct _IMAGE_DATA_DIRECTORY
+typedef struct _IMAGE_NT_HEADERS64
 {
-    DWORD   VirtualAddress;
-    DWORD   Size;
-} IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
+    DWORD Signature;
+    IMAGE_FILE_HEADER FileHeader;
+    IMAGE_OPTIONAL_HEADER64 OptionalHeader;
+} IMAGE_NT_HEADERS64, *PIMAGE_NT_HEADERS64;
 
 
 
 /**
- * Image Section structure.
+ * PE+ header structure.
  * 
- * @param Name
- * @param Misc
- * @param VirtualAddress
- * @param SizeOfRawData
- * @param PointerToRawData
- * @param PointerToRelocations
- * @param PointerToLinenumbers
- * @param NumberOfRelocations
- * @param NumberOfLinenumbers
- * @param Characteristics
+ * @param Signature  a 4-byte signature identifying the file as a PE image
+ * @param FileHeader  an IMAGE_FILE_HEADER structure
+ * @param OptionalHeader  an IMAGE_OPTIONAL_HEADER structure
  * 
  * @since 1.0.0
  */
-typedef struct _IMAGE_SECTION_HEADER {
-    BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];
-    union {
-            DWORD   PhysicalAddress;
-            DWORD   VirtualSize;
-    } Misc;
-    DWORD   VirtualAddress;
-    DWORD   SizeOfRawData;
-    DWORD   PointerToRawData;
-    DWORD   PointerToRelocations;
-    DWORD   PointerToLinenumbers;
-    WORD    NumberOfRelocations;
-    WORD    NumberOfLinenumbers;
-    DWORD   Characteristics;
-} IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
+typedef struct _IMAGE_NT_HEADERS
+{
+    DWORD Signature;
+    IMAGE_FILE_HEADER FileHeader;
+    IMAGE_OPTIONAL_HEADER32 OptionalHeader;
+} IMAGE_NT_HEADERS32, *PIMAGE_NT_HEADERS32;

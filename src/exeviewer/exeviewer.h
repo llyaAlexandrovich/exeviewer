@@ -8,25 +8,7 @@
 #include <stdbool.h>
 
 
-
-#include "types.h"
-#include "execute.h"
-#include "file/fileread.h"
-#include "format/format.h"
-#include "formats/win-exe/winexe.h"
-
-
-
-
-/**
- * Recognizable arguments.
- * NONE => if none of the options below are used
- * pretend like the only given argument is file name
- * -E --exec  file to execute program with
- * -SL --show-less  omit 'useless' data from the output
- * -S --supported  check whether your pc could run executable
- * -H --help  showing help page
- */
+#include "../types.h"
 
 
 
@@ -43,6 +25,13 @@ Help Page\n\
 ";
 
 
+
+static const char supportedformatstext[] ="\
+File format not recgonized\n\
+Available formats - .exe\n\
+";
+
+
 static const char versionstring[] = "1.0.0";
 
 static const int version = 233;
@@ -52,17 +41,28 @@ static const short versionminor = 0;
 static const short versionpatch = 0;
 
 
-static char executablename[MAX_FILE_NAME_LENGTH];
-static bool doshowless = false;
-static bool supportcheck = false;
+static char __attribute__((unused)) executablename[MAX_FILE_NAME_LENGTH];
+static bool __attribute__((unused)) doshowless = false;
+static bool __attribute__((unused)) supportcheck = false;
 
 
 
 /** 
- * Showing help text to the user.
+ * Show help text to the user.
  * 
  * @author Ilya Alexandrovich
  * 
  * @since 1.0.0
 */
-static void ShowHelpText();
+static void __attribute__((unused)) ShowHelpText();
+
+
+
+/**
+ * Show supported formats to the user.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @since 1.0.0
+ */
+static void __attribute__((unused)) ShowSupportedFormatsText();

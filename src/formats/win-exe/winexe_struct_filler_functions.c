@@ -7,6 +7,16 @@
 
 
 
+void FillOutNTEntireStructure(IMAGE_DOS_HEADER* idh, void* inh, char* buffer, int arch)
+{
+    FillOutDOSHeader(idh, buffer); // Fill out IMAGE_DOS_HEADER structure.
+
+    // Fill out IMAGE_NT_HEADERS32 or IMAGE_NT_HEADERS64 structure
+    FillOutNTHeader(idh, buffer, inh, arch);
+}
+
+
+
 void FillOutDOSHeader(IMAGE_DOS_HEADER* idh, char* buffer)
 {
     idh->e_magic    = MAKEWORD(buffer[0], buffer[1]);
@@ -69,10 +79,7 @@ void FillOutNTHeader(IMAGE_DOS_HEADER* idh, char* buffer, void* inh, int arch)
         FillOutNTOptionalHeaderHigh(idh, buffer, &(IMAGE_OPTIONAL_HEADER64)((IMAGE_NT_HEADERS64*)inh)->OptionalHeader);
 
         FillOutNTDataDirectoryHeader(idh, buffer, (IMAGE_DATA_DIRECTORY*)((IMAGE_NT_HEADERS64*)inh)->OptionalHeader.DataDirectory);
-    }
-
-    
-     
+    }  
 }
 
 

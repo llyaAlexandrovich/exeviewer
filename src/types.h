@@ -15,6 +15,11 @@
 #define MAX_FILE_NAME_LENGTH     60 // Maximum supported length of the file name.
 
 
+#define IMAGE_X32 0xaa // Define x32 arch.
+#define IMAGE_X64 0xff // Define x64 arch.
+
+
+
 // Windows-compatible types.
 typedef unsigned char     BYTE;
 typedef unsigned short    WORD;
@@ -47,12 +52,11 @@ typedef unsigned __int64  ULONG_PTR;
  * 
  * @since 1.0.0
  */
-static const enum ESupportedTypes
+enum ESupportedTypes
 {
     unrecognized = 0,
-    exec_pe      = 1,
-    exec_pep     = 2,
-
+    exec_pe, exe = 1,
+    exec_pep     = 2
 };
 
 
@@ -65,10 +69,12 @@ static const enum ESupportedTypes
  * @param unrecognized  unrecognized extension
  * @param exe  standart Windows executable(x32|x64)
  * 
+ * @deprecated  replaced
+ * 
  * @since 1.0.0
  */
-static const enum ESupportedExtensions
-{
-    unrecognized = 0,
-    exe          = 1
-} supportedextensions;
+// enum ESupportedExtensions
+// {
+//     unrecognized = 0,
+//     exe          = 1
+// };

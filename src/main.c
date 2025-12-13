@@ -1,12 +1,25 @@
-#include "exeviewer.h"
+#include <stdio.h>
+#include <string.h>
+
+
+#include "types.h"
+#include "exeviewer/exeviewer.h"
+#include "execute/execute.h"
+#include "file/fileread.h"
+#include "formats/win-exe/winexe.h"
 
 
 
 
-
-
-
-
+/**
+ * Recognizable arguments.
+ * NONE => if none of the options below are used
+ * pretend like the only given argument is file name
+ * -E --exec  file to execute program with
+ * -SL --show-less  omit 'useless' data from the output
+ * -S --supported  check whether your pc could run executable
+ * -H --help  showing help page
+ */
 int main(int argc, char** argv)
 {
     // Processing given args.
@@ -41,13 +54,19 @@ int main(int argc, char** argv)
         }
     }
 
+    // Try execute given file.
+    int executecode = 0;
+    if((executecode = TryExecuteViewer(executablename, doshowless, supportcheck)) != 0)
+    {
+        if(executecode == 1)
+        {
+            ShowSupportedFormatsText();
+            return 0;
+        }
+        else{
+            return 1;
+        }
+    }
 
-
-}
-
-
-
-static void ShowHelpText()
-{
-    printf(helptext, versionstring);
+    return 0;
 }

@@ -10,14 +10,3 @@
 #include "winexe_consts.h"
 #include "winexe_functions.h"
 #include "winexe_struct_filler_functions.h"
-
-
-
-
-
-
-
-/**
- * 
- */
-void ExecuteViewerOnEXE(char* buffer, bool doshowless);

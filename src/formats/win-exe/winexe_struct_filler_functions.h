@@ -13,6 +13,25 @@
 
 
 /**
+ * Perform reading and process all data and from file
+ * recognized as Windows executable.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param idh  pointer to IMAGE_DOS_HEADER structure
+ * @param inh  pointer to IMAGE_NT_HEADERS32 or IMAGE_NT_HEADERS64 structure
+ * @param buffer  file buffer
+ * @param arch  whether x32(IMAGE_PE_TYPE) or x64(IMAGE_PEP_TYPE)
+ * 
+ * @since 1.0.0
+ * 
+ */
+void FillOutNTEntireStructure(IMAGE_DOS_HEADER* idh, void* inh, char* buffer, int arch);
+
+
+
+
+/**
  * Fill out IMAGE_DOS_HEADER structure.
  * 
  * @author Ilya Alexandrovich

@@ -73,6 +73,6 @@ unsigned long long GetFileSize(char* const filename);
  * 
  * @param filename  pointer to the buffer with file name
  * 
- * @return return -1 in error otherwise ESupportedExtensions::value
+ * @return return -1 in error otherwise ESupportedTypes::value
  */
 int GetFileExtension(char* const filename);
