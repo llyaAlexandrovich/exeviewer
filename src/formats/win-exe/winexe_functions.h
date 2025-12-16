@@ -2,6 +2,7 @@
 
 
 
+#include <stdio.h>
 #include <stdbool.h>
 
 
@@ -27,31 +28,32 @@ void PrintDOSStubText(IMAGE_DOS_HEADER* idh, char* buffer);
 
 
 /**
- * Print out readable data from all executable headers.
+ * Print out readable data from all executable headers x32.
  * 
  * @author Ilya Alexandrovich
  * 
  * @param idh  pointer to IMAGE_DOS_HEADER structure
- * @param inh  pointer to IMAGE_NT_HEADERS32 or IMAGE_NT_HEADERS64 structure
+ * @param inh  pointer to IMAGE_NT_HEADERS32 structure
  * @param buffer  file buffer
- * @param arch  type of the executable(x64 | x32) to use
  * 
- * @since 1.0.0
+ * @since 1.0.6
  */
-void PrintHeadersData(IMAGE_DOS_HEADER* idh, void* inh, char* buffer, int arch);
+void PrintHeadersDataLow(IMAGE_DOS_HEADER* idh, IMAGE_NT_HEADERS32* inh, char* buffer);
 
 
 
 /**
- * Print out readable data from IMAGE_NT_HEADERS64 structure.
+ * Print out readable data from all executable headers x32.
  * 
  * @author Ilya Alexandrovich
  * 
+ * @param idh  pointer to IMAGE_DOS_HEADER structure
  * @param inh  pointer to IMAGE_NT_HEADERS64 structure
+ * @param buffer  file buffer
  * 
- * @since 1.0.0
+ * @since 1.0.6
  */
-void PrintNTHeaderLow(IMAGE_NT_HEADERS64* inh);
+void PrintHeadersDataHigh(IMAGE_DOS_HEADER* idh, IMAGE_NT_HEADERS64* inh, char* buffer);
 
 
 
@@ -64,7 +66,20 @@ void PrintNTHeaderLow(IMAGE_NT_HEADERS64* inh);
  * 
  * @since 1.0.0
  */
-void PrintNTHeaderHigh(IMAGE_NT_HEADERS32* inh);
+void PrintNTHeaderLow(IMAGE_NT_HEADERS32* inh);
+
+
+
+/**
+ * Print out readable data from IMAGE_NT_HEADERS64 structure.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param inh  pointer to IMAGE_NT_HEADERS64 structure
+ * 
+ * @since 1.0.0
+ */
+void PrintNTHeaderHigh(IMAGE_NT_HEADERS64* inh);
 
 
 
@@ -91,7 +106,7 @@ void PrintNTDataDirectoryHeader(IMAGE_DATA_DIRECTORY* idd);
  * 
  * @since 1.0.0
  */
-void PrintDOSHeader(IMAGE_DOS_HEADER* idh, char* buffer);
+void PrintDOSHeader(IMAGE_DOS_HEADER* idh);
 
 
 

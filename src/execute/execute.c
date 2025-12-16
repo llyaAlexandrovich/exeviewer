@@ -31,7 +31,6 @@ int TryExecuteViewer(char* const filename, bool doshowless, bool supportcheck)
 
     if(filetype == unrecognized)
     {
-        ShowSupportedFormatsText();
         return 1;
     }
     else if(filetype == exec_pe)
@@ -69,7 +68,7 @@ int TryExecuteViewer(char* const filename, bool doshowless, bool supportcheck)
         // Clearing resources.
         free(pex->buffer);
         free(pex->idh);
-        free(pex->inh);
+        free(pex->inh.low);
         free(pex);
         return 0;
     }
@@ -108,7 +107,7 @@ int TryExecuteViewer(char* const filename, bool doshowless, bool supportcheck)
         // Clearing resources.
         free(pex->buffer);
         free(pex->idh);
-        free(pex->inh);
+        free(pex->inh.high);
         free(pex);
         return 0;
     }
@@ -190,24 +189,24 @@ void GetInfoOfPEExecutable(PEExecutablesData* pex)
 {
     if(pex->arch == IMAGE_X32)
     {
-        pex->inh = (void*)malloc(sizeof(IMAGE_NT_HEADERS32));
+        pex->inh.low = malloc(sizeof(IMAGE_NT_HEADERS32));
 
-        FillOutNTEntireStructure(pex->idh, pex->inh, pex->buffer, IMAGE_PE_TYPE);
+        FillOutNTEntireStructureLow(pex->idh, pex->inh.low, pex->buffer);
 
         if(!pex->doshowless)
         {
-            PrintHeadersData(pex->idh, pex->inh, pex->buffer, pex->arch);
+            PrintHeadersDataLow(pex->idh, pex->inh.low, pex->buffer);
         }
     }
     else if(pex->arch == IMAGE_X64)
     {
-        pex->inh = malloc(sizeof(IMAGE_NT_HEADERS64));
+        pex->inh.high = malloc(sizeof(IMAGE_NT_HEADERS64));
 
-        FillOutNTEntireStructure(pex->idh, pex->inh, pex->buffer, IMAGE_PEP_TYPE);
+        FillOutNTEntireStructureHigh(pex->idh, pex->inh.high, pex->buffer);
 
         if(!pex->doshowless)
         {
-            PrintHeadersData(pex->idh, pex->inh, pex->buffer, pex->arch);
+            PrintHeadersDataHigh(pex->idh, pex->inh.high, pex->buffer);
         }
     }
 }

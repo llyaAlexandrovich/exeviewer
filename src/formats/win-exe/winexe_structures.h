@@ -121,9 +121,11 @@ typedef struct _IMAGE_DATA_DIRECTORY
  * 
  * @since 1.0.0
  */
-typedef struct _IMAGE_SECTION_HEADER {
+typedef struct _IMAGE_SECTION_HEADER 
+{
     BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];
-    union {
+    union
+    {
             DWORD   PhysicalAddress;
             DWORD   VirtualSize;
     } Misc;

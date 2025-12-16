@@ -1,16 +1,16 @@
-GCC := gcc -m64 -std=c11 -Werror -Wall -O3
-SUBDIRS := src/formats/win-exe/ ./
+export GCC := gcc -ggdb -m64 -std=c11 -Werror -Wall -O3 -static -fanalyzer
+export SUBDIRS := src/formats/win-exe/
 
 ifeq ($(OS),Linux)
-	OBJECTEXT := o
-	EXECUTABLEEXT := elf
-	LIBEXT := so
+	export OBJECTEXT := o
+	export EXECUTABLEEXT := elf
+	export LIBEXT := so
 endif
 
 ifeq ($(OS),Windows_NT)
-	OBJECTEXT := obj
-	EXECUTABLEEXT := exe
-	LIBEXT := dll
+	export OBJECTEXT := obj
+	export EXECUTABLEEXT := exe
+	export LIBEXT := dll
 endif
 
 
@@ -18,20 +18,25 @@ endif
 all : $(SUBDIRS)
 
 
-$(SUBDIRS) : exeviewer.o execute.o file.o src/types.h src/main.c
-	$(MAKE) -C $@
-	$(GCC) -static -o bin/exeviewer.$(EXECUTABLEEXT) build/exeviewer.$(OBJECTEXT) build/execute.$(OBJECTEXT) build/file.$(OBJECTEXT) src/types.h src/main.c
+$(SUBDIRS) : exeviewer execute file main src/types.h
+	$(GCC) -fuse-ld=lld -o bin/exeviewer.$(EXECUTABLEEXT) src/types.h build/winexe.$(OBJECTEXT) build/winexefunctions.$(OBJECTEXT) build/winexe_struct_filler_functions.$(OBJECTEXT) build/exeviewer.$(OBJECTEXT) \
+	build/execute.$(OBJECTEXT) build/file.$(OBJECTEXT) build/main.$(OBJECTEXT)
+	$(MAKE) -C $@ winexe
 
 
-exeviewer.o : src/exeviewer/exeviewer.h src/exeviewer/exeviewer.c
+main : src/main.C
+	$(GCC) -c -o build/main.$(OBJECTEXT) src/main.c
+
+
+exeviewer : src/exeviewer/exeviewer.h src/exeviewer/exeviewer.c
 	$(GCC) -c -o build/exeviewer.$(OBJECTEXT) src/exeviewer/exeviewer.c
 
 
-execute.o : src/execute/execute.h src/execute/execute.c
+execute : src/execute/execute.h src/execute/execute.c
 	$(GCC) -c -o build/execute.$(OBJECTEXT) src/execute/execute.c
 
 
-file.o : src/file/fileread.h src/file/fileread.c
+file : src/file/fileread.h src/file/fileread.c
 	$(GCC) -c -o build/file.$(OBJECTEXT) src/file/fileread.c
 
 

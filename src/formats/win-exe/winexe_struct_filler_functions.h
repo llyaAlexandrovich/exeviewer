@@ -13,21 +13,34 @@
 
 
 /**
- * Perform reading and process all data and from file
- * recognized as Windows executable.
+ * Perform reading and processing all the data from the file.
+ * recognized as Windows executable x32.
  * 
  * @author Ilya Alexandrovich
  * 
- * @param idh  pointer to IMAGE_DOS_HEADER structure
- * @param inh  pointer to IMAGE_NT_HEADERS32 or IMAGE_NT_HEADERS64 structure
+ * @param idh  pointer to IAMGE_DOS_HEADER structure
+ * @param inh  pointer to IMAGE_NT_HEADERS32 structure
  * @param buffer  file buffer
- * @param arch  whether x32(IMAGE_PE_TYPE) or x64(IMAGE_PEP_TYPE)
  * 
- * @since 1.0.0
- * 
+ * @since 1.0.6
  */
-void FillOutNTEntireStructure(IMAGE_DOS_HEADER* idh, void* inh, char* buffer, int arch);
+void FillOutNTEntireStructureLow(IMAGE_DOS_HEADER* idh, IMAGE_NT_HEADERS32* inh, char* buffer);
 
+
+
+/**
+ * Perform reading and processing all the data from the file.
+ * recognized as Windows executable x64.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param idh  pointer to IAMGE_DOS_HEADER structure
+ * @param inh  pointer to IMAGE_NT_HEADERS32 structure
+ * @param buffer  file buffer
+ * 
+ * @since 1.0.6
+ */
+void FillOutNTEntireStructureHigh(IMAGE_DOS_HEADER* idh, IMAGE_NT_HEADERS64* inh, char* buffer);
 
 
 
@@ -46,18 +59,32 @@ void FillOutDOSHeader(IMAGE_DOS_HEADER* idh, char* buffer);
 
 
 /**
- * Fill out IMAGE_NT_HEADERS32 or IMAGE_NT_HEADERS64 structure.
+ * Fill out IMAGE_NT_HEADERS32 structure.
  * 
  * @author Ilya Alexandrovich
  * 
- * @param idh  pointer to IMAGE_DOS_HEADER
+ * @param idh  pointer to IMAGE_DOS_HEADER structure
  * @param buffer  file buffer
- * @param inh  pointer to IMAGE_NT_HEADERS32 or IMAGE_NT_HEADERS64 structure
- * @param arch  type of the executable(x64 | x32) to use
+ * @param inh  pointer to IMAGE_NT_HEADERS32 structure
  * 
- * @since 1.0.0
+ * @since 1.0.6
  */
-void FillOutNTHeader(IMAGE_DOS_HEADER* idh, char* buffer, void* inh, int arch);
+void FillOutNTHeaderLow(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS32* inh);
+
+
+
+/**
+ * Fill out IMAGE_NT_HEADERS64 structure.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param idh  pointer to IMAGE_DOS_HEADER structure
+ * @param buffer  file buffer
+ * @param inh  pointer to IMAGE_NT_HEADERS64 structure
+ * 
+ * @since 1.0.6
+ */
+void FillOutNTHeaderHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS64* inh);
 
 
 
@@ -137,17 +164,33 @@ void FillOutNTDataDirectoryHeaderLow(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_
 
 
 /**
- * Fill out IMAGE_DATA_DIRECTORY structure and IMAGE_SECTION_HEADER for every instance of
- * IMAGE_DATA_DIRECTORY structure.
+ * Fill out IMAGE_DATA_DIRECTORY structure and IMAGE_SECTION_HEADER for every instance
+ * of IMAGE_DATA_DIRECTORY structure.
  * 
  * @author Ilya Alexandrovich
  * 
  * @param idh  pointer to IMAGE_DOS_HEADER structure
  * @param buffer  file buffer
- * @param inh  pointer to IMAGE_NT_HEADERS32 or IMAGE_NT_HEADERS64 structure
- * @param arch  type of the executable(x64 | x32) to use
+ * @param inh  pointer to IMAGE_NT_HEADERS32 structure
  * @param ish  pointer to IMAGE_SECTION_HEADER structure
  * 
- * @since 1.0.0
+ * @since 1.0.6
  */
-void FillOutDataSection(IMAGE_DOS_HEADER* idh, char* buffer, void* inh, int arch, IMAGE_SECTION_HEADER* ish);
+void FillOutDataSectionLow(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS32* inh, IMAGE_SECTION_HEADER* ish);
+
+
+
+/**
+ * Fill out IMAGE_DATA_DIRECTORY structure and IMAGE_SECTION_HEADER for every instance
+ * of IMAGE_DATA_DIRECTORY structure.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param idh  pointer to IMAGE_DOS_HEADER structure
+ * @param buffer  file buffer
+ * @param inh  pointer to IMAGE_NT_HEADERS64 structure
+ * @param ish  pointer to IMAGE_SECTION_HEADER structure
+ * 
+ * @since 1.0.6
+ */
+void FillOutDataSectionHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS64* inh, IMAGE_SECTION_HEADER* ish);

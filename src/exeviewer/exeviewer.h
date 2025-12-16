@@ -27,18 +27,16 @@ Help Page\n\
 
 
 static const char supportedformatstext[] ="\
-File format not recgonized\n\
+File format not recognized\n\
 Available formats - .exe\n\
 ";
 
 
-static const char versionstring[] = "1.0.0";
-
-static const int version = 233;
+static const char versionstring[] = "1.0.6";
 
 static const short versionmajor = 1;
 static const short versionminor = 0;
-static const short versionpatch = 0;
+static const short versionpatch = 6;
 
 
 static char __attribute__((unused)) executablename[MAX_FILE_NAME_LENGTH];
@@ -54,7 +52,7 @@ static bool __attribute__((unused)) supportcheck = false;
  * 
  * @since 1.0.0
 */
-static void __attribute__((unused)) ShowHelpText();
+void ShowHelpText();
 
 
 
@@ -65,4 +63,4 @@ static void __attribute__((unused)) ShowHelpText();
  * 
  * @since 1.0.0
  */
-static void __attribute__((unused)) ShowSupportedFormatsText();
+void ShowSupportedFormatsText();

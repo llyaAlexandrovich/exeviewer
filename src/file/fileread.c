@@ -18,6 +18,7 @@ int ReadFileEntry(char* const filename, char* filebuffer)
     ssize_t bytesread = fread((void*)filebuffer, sizeof(char), NUMBER_OF_BYTES_IN_ENTRY, fd); // Trying to read file.
     if(bytesread == 0)
     {
+        fclose(fd);
         return -1;
     }
 
@@ -31,7 +32,7 @@ int ReadFileEntry(char* const filename, char* filebuffer)
 int ReadFile(char* const filename, char* filebuffer)
 {
     unsigned long long size = GetFileSize(filename); // Getting file size.
-    if(size == -1)
+    if(size == 0)
     {
         return -1;
     }
@@ -45,6 +46,7 @@ int ReadFile(char* const filename, char* filebuffer)
     ssize_t bytesread = fread((void* restrict)filebuffer, sizeof(char), size, fd); // Trying to read file.
     if(bytesread == 0)
     {
+        fclose(fd);
         return -1;
     }
 

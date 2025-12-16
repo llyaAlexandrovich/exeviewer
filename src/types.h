@@ -35,8 +35,8 @@ typedef unsigned __int64  ULONG_PTR;
 // Windows-compatible macros.
 #define MAKEWORD(a,b) ((WORD) (((BYTE)  (((DWORD_PTR) (a)) & 0xff)) | ((WORD) ((BYTE) (((DWORD_PTR) (b)) & 0xff))) << 8))
 #define MAKELONG(a,b) ((LONG) (((WORD)  (((DWORD_PTR) (a)) & 0xffff)) | ((DWORD) ((WORD) (((DWORD_PTR) (b)) & 0xffff))) << 16))
-#define MAKELONGLONG(a,b)  ((LONGLONG)  ((((DWORD) (a)) & 0xffffffff) | ((((DWORD) (b)) & 0xffffffff)) << 32))
-#define MAKEULONGLONG(a,b) ((ULONGLONG) ((((DWORD) (a)) & 0xffffffff) | ((((DWORD) (b)) & 0xffffffff)) << 32))
+#define MAKELONGLONG(a,b)  ((LONGLONG)  ((((DWORD) (a)) & 0xffffffff) | (LONGLONG)((((DWORD) (b)) & 0xffffffff)) << 32))
+#define MAKEULONGLONG(a,b) ((ULONGLONG) ((((DWORD) (a)) & 0xffffffff) | (ULONGLONG)((((DWORD) (b)) & 0xffffffff)) << 32))
 
 
 

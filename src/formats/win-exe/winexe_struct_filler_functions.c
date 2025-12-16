@@ -7,12 +7,20 @@
 
 
 
-void FillOutNTEntireStructure(IMAGE_DOS_HEADER* idh, void* inh, char* buffer, int arch)
+void FillOutNTEntireStructureLow(IMAGE_DOS_HEADER* idh, IMAGE_NT_HEADERS32* inh, char* buffer)
 {
     FillOutDOSHeader(idh, buffer); // Fill out IMAGE_DOS_HEADER structure.
 
-    // Fill out IMAGE_NT_HEADERS32 or IMAGE_NT_HEADERS64 structure
-    FillOutNTHeader(idh, buffer, inh, arch);
+
+}
+
+
+
+void FillOutNTEntireStructureHigh(IMAGE_DOS_HEADER* idh, IMAGE_NT_HEADERS64* inh, char* buffer)
+{
+    FillOutDOSHeader(idh, buffer); // Fill out IMAGE_DOS_HEADER structure.
+
+
 }
 
 
@@ -54,32 +62,34 @@ void FillOutDOSHeader(IMAGE_DOS_HEADER* idh, char* buffer)
 
 
 
-void FillOutNTHeader(IMAGE_DOS_HEADER* idh, char* buffer, void* inh, int arch)
+void FillOutNTHeaderLow(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS32* inh)
 {
     long offset = idh->e_lfanew;
 
-    if(arch == IMAGE_PE_TYPE) // x32
-    {
-        ((IMAGE_NT_HEADERS32*)inh)->Signature = \
-        MAKELONG(MAKEWORD(buffer[offset], buffer[offset + 1]), MAKEWORD(buffer[offset + 2], buffer[offset + 3]));
+    inh->Signature = \
+    MAKELONG(MAKEWORD(buffer[offset], buffer[offset + 1]), MAKEWORD(buffer[offset + 2], buffer[offset + 3]));
 
-        FillOutNTFileHeader(idh, buffer, &(IMAGE_FILE_HEADER)((IMAGE_NT_HEADERS32*)inh)->FileHeader);
+    FillOutNTFileHeader(idh, buffer, &inh->FileHeader);
 
-        FillOutNTOptionalHeaderLow(idh, buffer, &(IMAGE_OPTIONAL_HEADER32)((IMAGE_NT_HEADERS32*)inh)->OptionalHeader);
+    FillOutNTOptionalHeaderLow(idh, buffer, &inh->OptionalHeader);
 
-        FillOutNTDataDirectoryHeader(idh, buffer, (IMAGE_DATA_DIRECTORY*)((IMAGE_NT_HEADERS32*)inh)->OptionalHeader.DataDirectory);
-    }
-    else if(arch == IMAGE_PEP_TYPE) // x64
-    {
-        ((IMAGE_NT_HEADERS64*)inh)->Signature = \
-        MAKELONG(MAKEWORD(buffer[offset], buffer[offset + 1]), MAKEWORD(buffer[offset + 2], buffer[offset + 3]));
+    FillOutNTDataDirectoryHeaderLow(idh, buffer, inh->OptionalHeader.DataDirectory);
+}
 
-        FillOutNTFileHeader(idh, buffer, &(IMAGE_FILE_HEADER)((IMAGE_NT_HEADERS64*)inh)->FileHeader);
 
-        FillOutNTOptionalHeaderHigh(idh, buffer, &(IMAGE_OPTIONAL_HEADER64)((IMAGE_NT_HEADERS64*)inh)->OptionalHeader);
 
-        FillOutNTDataDirectoryHeader(idh, buffer, (IMAGE_DATA_DIRECTORY*)((IMAGE_NT_HEADERS64*)inh)->OptionalHeader.DataDirectory);
-    }  
+void FillOutNTHeaderHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS64* inh)
+{
+    long offset = idh->e_lfanew;
+
+    inh->Signature = \
+    MAKELONG(MAKEWORD(buffer[offset], buffer[offset + 1]), MAKEWORD(buffer[offset + 2], buffer[offset + 3]));
+
+    FillOutNTFileHeader(idh, buffer, &inh->FileHeader);
+
+    FillOutNTOptionalHeaderHigh(idh, buffer, &inh->OptionalHeader);
+
+    FillOutNTDataDirectoryHeaderHigh(idh, buffer, inh->OptionalHeader.DataDirectory);
 }
 
 
@@ -249,18 +259,14 @@ void FillOutNTDataDirectoryHeaderHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE
 
 
 
-void FillOutDataSection(IMAGE_DOS_HEADER* idh, char* buffer, void* inh, int arch, IMAGE_SECTION_HEADER* ish)
+void FillOutDataSectionLow(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS32* inh, IMAGE_SECTION_HEADER* ish)
 {
-    if(arch == IMAGE_PE_TYPE) //x32
-    {
-        // Offset + PE magic 4 bytes + IMAGE_OPTIONAL_HEADER32 size.
-        long offset = idh->e_lfanew + 4 + IMAGE_SIZEOF_OPTIONAL_HEADER32;
 
-        
-    }
-    else if(arch == IMAGE_PEP_TYPE) //x64
-    {
-        // Offset + PE magic 4 bytes + IMAGE_OPTIONAL_HEADER64 size.
-        long offset = idh->e_lfanew + 4 + IMAGE_SIZEOF_OPTIONAL_HEADER32;
-    }
+}
+
+
+
+void FillOutDataSectionHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS64* inh, IMAGE_SECTION_HEADER* ish)
+{
+    
 }

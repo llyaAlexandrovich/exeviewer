@@ -7,14 +7,14 @@
 
 
 
-static void __attribute__((unused)) ShowHelpText()
+void ShowHelpText()
 {
     printf(helptext, versionstring);
 }
 
 
 
-static void __attribute__((unused)) ShowSupportedFormatsText()
+void ShowSupportedFormatsText()
 {
     printf(supportedformatstext);
 }

@@ -3,8 +3,8 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
-#include <malloc.h>
 
 
 #include "../types.h"
@@ -20,7 +20,11 @@ typedef struct _PEExecutablesData
     bool     supportcheck;
     char*          buffer;
     char*        filename;
-    void*             inh;
+    union
+    {
+        IMAGE_NT_HEADERS32* low;
+        IMAGE_NT_HEADERS64* high;
+    } inh;
     int              arch;
 } PEExecutablesData;
 
