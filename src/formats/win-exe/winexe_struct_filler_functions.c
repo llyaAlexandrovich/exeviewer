@@ -11,6 +11,7 @@ void FillOutNTEntireStructureLow(IMAGE_DOS_HEADER* idh, IMAGE_NT_HEADERS32* inh,
 {
     FillOutDOSHeader(idh, buffer); // Fill out IMAGE_DOS_HEADER structure.
 
+    FillOutNTHeaderLow(idh, buffer, inh); // Fill out IMAGE_NT_HEADERS32 structure.
 
 }
 
@@ -20,7 +21,7 @@ void FillOutNTEntireStructureHigh(IMAGE_DOS_HEADER* idh, IMAGE_NT_HEADERS64* inh
 {
     FillOutDOSHeader(idh, buffer); // Fill out IMAGE_DOS_HEADER structure.
 
-
+    FillOutNTHeaderHigh(idh, buffer, inh); // Fill out IMAGE_NT_HEADERS64 structure.
 }
 
 

@@ -2,9 +2,7 @@ BUILDDIR := ../../../build/
 
 
 
-winexe : winexe winexefunctions winexe_struct_filler_functions
-
-
+target : winexe winexefunctions winexe_struct_filler_functions
 
 winexe : winexe.h winexe.c
 	$(GCC) -c -o $(BUILDDIR)winexe.$(OBJECTEXT) winexe.c

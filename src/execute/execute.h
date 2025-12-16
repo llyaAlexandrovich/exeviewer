@@ -15,15 +15,15 @@
 
 typedef struct _PEExecutablesData
 {
-    IMAGE_DOS_HEADER* idh;
+    IMAGE_DOS_HEADER  idh;
     bool       doshowless;
     bool     supportcheck;
     char*          buffer;
     char*        filename;
     union
     {
-        IMAGE_NT_HEADERS32* low;
-        IMAGE_NT_HEADERS64* high;
+        IMAGE_NT_HEADERS32 low;
+        IMAGE_NT_HEADERS64 high;
     } inh;
     int              arch;
 } PEExecutablesData;
@@ -36,8 +36,12 @@ typedef struct _PEExecutablesData
  * @author Ilya Alexandrovich
  * 
  * @param filename  file name to try exeviewer on
+ * @param doshowless  bool argument specified to whether to
+ * write data into terminal or keep it clean
+ * @param supportcheck  check whether executable could
+ * run in current system
  * 
- * @return return -1 in error, 0 in success 1 if file was not recognized
+ * @return return EXIT_FAILURE in error, EXIT_SUCCESS in success
  * 
  * @since 1.0.0
  */
@@ -52,34 +56,38 @@ int TryExecuteViewer(char* const filename, bool doshowless, bool supportcheck);
  * @author Ilya Alexandrovich
  * 
  * @param filename  name of the file to check size of
+ * @param filesize  pointer to a variable into which the 
+ * result will be written
  * 
- * @return return 0 in error otherwise returns file size
+ * @return return EXIT_FAILURE in error otherwise EXIT_SUCCESS
  * 
  * @since 1.0.0
  * 
  */
-unsigned long long CheckFileSize(char* const filename);
+int CheckFileSize(char* const filename, unsigned long long* filesize);
 
 
 
 /**
- * Check type of the given file.
+ * Determine type of the given file.
  * 
  * @author Ilya Alexandrovich
  * 
  * @param filename  name of the file to check on
  * @param buffer  file buffer
+ * @param filetype  pointer to a variable into which the 
+ * result will be written
  * 
- * @return return -1 in error otherwise ESupportedTypes::value
+ * @return return EXIT_FAILURE in error otherwise ESupportedTypes::value
  * 
  * @since 1.0.0
  */
-int CheckFileType(char* const filename, char* buffer);
+int DetermineFileType(char* const filename, char* buffer, int* filetype);
 
 
 
 /**
- * Get filled information structure of the given file.
+ * Get information about given executable file.
  * 
  * @author Ilya Alexandrovich
  * 
@@ -87,4 +95,30 @@ int CheckFileType(char* const filename, char* buffer);
  * 
  * @since 1.0.0
  */
-void GetInfoOfPEExecutable(PEExecutablesData* pex);
+void GetInfoOfPEExecutable(PEExecutablesData* pds);
+
+
+
+/**
+ * Print information about executable file.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param pds  pointer to PEExecutablesData structure
+ * 
+ * @since 1.0.7
+ */
+void PrintInfoOfPEExecutable(PEExecutablesData* pds);
+
+
+
+/**
+ * Check if file is recognized and supported.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param buffer  file buffer
+ * 
+ * @since 1.0.7
+ */
+bool bIsFileRecognizedExecutable(char* buffer);

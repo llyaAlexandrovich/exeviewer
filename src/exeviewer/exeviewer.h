@@ -39,9 +39,9 @@ static const short versionminor = 0;
 static const short versionpatch = 6;
 
 
-static char __attribute__((unused)) executablename[MAX_FILE_NAME_LENGTH];
-static bool __attribute__((unused)) doshowless = false;
-static bool __attribute__((unused)) supportcheck = false;
+static char __attribute__((used)) executablename[MAX_FILE_NAME_LENGTH];
+static bool __attribute__((used)) doshowless = false;
+static bool __attribute__((used)) supportcheck = false;
 
 
 

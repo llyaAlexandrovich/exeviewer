@@ -3,6 +3,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 
@@ -24,7 +25,7 @@
  * @param filebuffer  pointer to the buffer in which to
  * write data from the file
  * 
- * @return return -1 in error otherwise 0
+ * @return return EXIT_FAILURE in error otherwise EXIT_SUCCESS
  * 
  * @since 1.0.0
 */
@@ -42,7 +43,7 @@ int ReadFileEntry(char* const filename, char* filebuffer);
  * @param filebuffer  pointer to the buffer in which to
  * write data from the file
  * 
- * @return return -1 in error otherwise 0
+ * @return return EXIT_FAILURE in error otherwise EXIT_SUCCESS
  * 
  * @since 1.0.0
 */
@@ -57,12 +58,14 @@ int ReadFile(char* const filename, char* filebuffer);
  * 
  * @param filename  pointer to char buffer containing
  * name of the file required to read
+ * @param filesize  pointer to a variable into which the result 
+ * will be written
  * 
- * @return return 0 in error otherwise file size
+ * @return return EXIT_FAILURE in error otherwise EXIT_SUCCESS
  * 
  * @since 1.0.0
 */
-unsigned long long GetFileSize(char* const filename);
+int GetFileSize(char* const filename, unsigned long long* filesize);
 
 
 
@@ -72,7 +75,9 @@ unsigned long long GetFileSize(char* const filename);
  * @author Ilya Alexandrovich
  * 
  * @param filename  pointer to the buffer with file name
+ * @param fileext  pointer to a variable into which the result 
+ * will be written
  * 
- * @return return -1 in error otherwise ESupportedTypes::value
+ * @return return EXIT_FAILURE in error otherwise EXIT_SUCCESS
  */
-int GetFileExtension(char* const filename);
+int GetFileExtension(char* const filename, int* fileext);

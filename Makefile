@@ -1,5 +1,5 @@
 export GCC := gcc -ggdb -m64 -std=c11 -Werror -Wall -O3 -static -fanalyzer
-export SUBDIRS := src/formats/win-exe/
+SUBDIRS := src/formats/win-exe/
 
 ifeq ($(OS),Linux)
 	export OBJECTEXT := o
@@ -15,13 +15,16 @@ endif
 
 
 
-all : $(SUBDIRS)
 
 
-$(SUBDIRS) : exeviewer execute file main src/types.h
+
+target : exeviewer execute file winexe main src/types.h
 	$(GCC) -fuse-ld=lld -o bin/exeviewer.$(EXECUTABLEEXT) src/types.h build/winexe.$(OBJECTEXT) build/winexefunctions.$(OBJECTEXT) build/winexe_struct_filler_functions.$(OBJECTEXT) build/exeviewer.$(OBJECTEXT) \
 	build/execute.$(OBJECTEXT) build/file.$(OBJECTEXT) build/main.$(OBJECTEXT)
-	$(MAKE) -C $@ winexe
+
+
+winexe :
+	$(MAKE) -C $(SUBDIRS)
 
 
 main : src/main.C
@@ -41,4 +44,4 @@ file : src/file/fileread.h src/file/fileread.c
 
 
 
-.PHONY : all $(SUBDIRS)
+

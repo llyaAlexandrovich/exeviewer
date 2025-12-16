@@ -12,71 +12,72 @@ int ReadFileEntry(char* const filename, char* filebuffer)
     FILE* fd = fopen(filename, "rb"); // Getting file descriptor.
     if(fd == NULL)
     {
-        return -1;
+        return EXIT_FAILURE;
     }
 
     ssize_t bytesread = fread((void*)filebuffer, sizeof(char), NUMBER_OF_BYTES_IN_ENTRY, fd); // Trying to read file.
     if(bytesread == 0)
     {
         fclose(fd);
-        return -1;
+        return EXIT_FAILURE;
     }
 
     fclose(fd); // Closing file descriptor.
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 
 
 int ReadFile(char* const filename, char* filebuffer)
 {
-    unsigned long long size = GetFileSize(filename); // Getting file size.
+    unsigned long long size = 0;
+    GetFileSize(filename, &size); // Getting file size.
     if(size == 0)
     {
-        return -1;
+        return EXIT_FAILURE;
     }
 
     FILE* fd = fopen(filename, "rb"); // Getting file descriptor.
     if(fd == NULL)
     {
-        return -1;
+        return EXIT_FAILURE;
     }
 
     ssize_t bytesread = fread((void* restrict)filebuffer, sizeof(char), size, fd); // Trying to read file.
     if(bytesread == 0)
     {
         fclose(fd);
-        return -1;
+        return EXIT_FAILURE;
     }
 
     fclose(fd); // Closing file descriptor.
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 
 
-unsigned long long GetFileSize(char* const filename)
+int GetFileSize(char* const filename, unsigned long long* filesize)
 {
     FILE* fd = fopen(filename, "rb"); // Getting file descriptor.
     if(fd == NULL)
     {
-        return (unsigned long long)0;
+        return EXIT_FAILURE;
     }
 
     fseek(fd, 0, SEEK_END); // Processing file size.
 
-    unsigned long long size = ftell(fd); // Getting file size.
+    (*filesize) = ftell(fd); // Getting file size.
 
     fclose(fd); // Closing file descriptor.
 
-    return size;
+    return EXIT_SUCCESS;
 }
 
 
 
-int GetFileExtension(char* const filename)
+int GetFileExtension(char* const filename, int* fileext)
 {
     short filenamesize = sizeof(filename);
 
@@ -85,10 +86,12 @@ int GetFileExtension(char* const filename)
 
     if(strcmp(&filename[counter], "exe"))
     {
-        return exe;
+        (*fileext) = (int)exe;
+        return EXIT_SUCCESS;
     }
     else
     {
-        return unrecognized;
+        (*fileext) = (int)unrecognized;
+        return EXIT_SUCCESS;
     }
 }

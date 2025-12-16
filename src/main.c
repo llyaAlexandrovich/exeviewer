@@ -11,6 +11,7 @@
 
 
 
+
 /**
  * Recognizable arguments.
  * NONE => if none of the options below are used
@@ -68,17 +69,13 @@ int main(int argc, char** argv)
     }
 
     // Try execute given file.
-    int executecode = 0;
-    if((executecode = TryExecuteViewer(executablename, doshowless, supportcheck)) != 0)
+    if(TryExecuteViewer(executablename, doshowless, supportcheck) != EXIT_SUCCESS)
     {
-        if(executecode == 1)
-        {
-            ShowSupportedFormatsText();
-            return 0;
-        }
-        else{
-            return 1;
-        }
+        return EXIT_FAILURE;
+    }
+    else
+    {
+        return EXIT_SUCCESS;
     }
 
     return 0;

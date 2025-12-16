@@ -6,143 +6,171 @@
 
 
 
-
+/**
+ * 1. Check file size. File size should be at least NUMBER_OF_BYTES_IN_FILE(50000) bytes.
+ * 2. Initialize PEExecutablesData structure.
+ * 3. Read entry NUMBER_OF_BYTES_IN_ENTRY(80) bytes. That's should be enough to determine if
+ *    file actually supported or not.
+ * 4. Determine if given file is actually supported(by magic bytes(signature)).
+ * 5. Read file fully.
+ */
 int TryExecuteViewer(char* const filename, bool doshowless, bool supportcheck)
 {
     // Check file size.
     unsigned long long filesize = 0;
-    if((filesize = CheckFileSize(filename)) == 0)
+    if(CheckFileSize(filename, &filesize) == EXIT_FAILURE)
     {
-        return -1;
+        return EXIT_FAILURE;
     }
+
+    // Checking if the file meets the required conditions.
+    if(filesize <= NUMBER_OF_BYTES_IN_FILE)
+    {
+        return EXIT_FAILURE;
+    }
+
+
+    // Initialize PEExecutablesData structure.
+    PEExecutablesData pds;
+    pds.doshowless   = doshowless;
+    pds.supportcheck = supportcheck;
+    pds.filename     = filename;
+    pds.buffer = malloc(NUMBER_OF_BYTES_IN_ENTRY * sizeof(char));
+
+    // Check for memory to be allocated.
+    if(pds.buffer == NULL)
+    {
+        return EXIT_FAILURE;
+    }
+
 
     // Read entry part of the file.
-    char entrybuffer[NUMBER_OF_BYTES_IN_ENTRY + 1];
-    if(ReadFileEntry(filename, entrybuffer) == -1)
+    if(ReadFileEntry(pds.filename, pds.buffer) == EXIT_FAILURE)
     {
-        return -1;
+        free(pds.buffer);
+        return EXIT_FAILURE;
     }
 
+
+    // Determine if file signature is supported.
+    if(!bIsFileRecognizedExecutable(pds.buffer))
+    {
+        free(pds.buffer);
+        return EXIT_FAILURE;
+    }
+
+
+    // Create real buffer and write the whole file in it.
+    free(pds.buffer);
+
+    pds.buffer = malloc(filesize * sizeof(char));
+    if(pds.buffer == NULL)
+    {
+        return EXIT_FAILURE;
+    }
+
+    if(ReadFile(pds.filename, pds.buffer) == EXIT_FAILURE)
+    {
+        free(pds.buffer);
+        return EXIT_FAILURE;
+    }
+    
+
+    // Determine file type.
     int filetype = 0;
-    if((filetype = CheckFileType(filename, entrybuffer)) == -1)
+    if(DetermineFileType(pds.filename, pds.buffer, &filetype) == EXIT_FAILURE)
     {
-        return -1;
+        free(pds.buffer);
+        return EXIT_FAILURE;
+    }
+    
+
+    switch(filetype)
+    {
+        case unrecognized:
+            free(pds.buffer);
+            ShowSupportedFormatsText();
+            return EXIT_SUCCESS;
+
+        case exec_pe:
+            // Set up x32 arch.
+            pds.arch = IMAGE_X32;
+
+
+            // Get info of exe file.
+            GetInfoOfPEExecutable(&pds);
+
+
+            // Print info to the console if not omitted.
+            if(!pds.doshowless)
+            {
+                PrintInfoOfPEExecutable(&pds);
+            }
+
+
+            // Freeing resources.
+            free(pds.buffer);
+
+
+            return EXIT_SUCCESS;
+
+        case exec_pep:
+            // Set up x32 arch.
+            pds.arch = IMAGE_X64;
+
+
+            // Get info of exe file.
+            GetInfoOfPEExecutable(&pds);
+
+
+            // Print info to the console if not omitted.
+            if(!pds.doshowless)
+            {
+                PrintInfoOfPEExecutable(&pds);
+            }
+
+
+            // Freeing resources.
+            free(pds.buffer);
+
+
+            return EXIT_SUCCESS;
+
+        default:
+            return EXIT_FAILURE;
     }
 
-    if(filetype == unrecognized)
-    {
-        return 1;
-    }
-    else if(filetype == exec_pe)
-    {
-        // Create internal directory for PE related executables.
-        PEExecutablesData* pex = malloc(sizeof(PEExecutablesData));
-        if(pex == NULL)
-        {
-            return -1;
-        }
-
-        // Create buffer for entire file data.
-        pex->buffer = malloc(filesize);
-        if(pex->buffer == NULL)
-        {
-            return -1;
-        }
-
-        // Create IMAGE_DOS_HEADER structure.
-        pex->idh = malloc(sizeof(IMAGE_DOS_HEADER));
-        if(pex->idh == NULL)
-        {
-            return -1;
-        }
-
-        // Fill remaining structure data.
-        pex->filename     = filename;
-        pex->doshowless   = doshowless;
-        pex->supportcheck = supportcheck;
-        pex->arch         = IMAGE_X32;
-
-        // 
-        GetInfoOfPEExecutable(pex);
-
-        // Clearing resources.
-        free(pex->buffer);
-        free(pex->idh);
-        free(pex->inh.low);
-        free(pex);
-        return 0;
-    }
-    else if(filetype == exec_pep)
-    {
-        // Create internal directory for PE related executables.
-        PEExecutablesData* pex = malloc(sizeof(PEExecutablesData));
-        if(pex == NULL)
-        {
-            return -1;
-        }
-
-        // Create buffer for entire file data.
-        pex->buffer = malloc(filesize);
-        if(pex->buffer == NULL)
-        {
-            return -1;
-        }
-
-        // Create IMAGE_DOS_HEADER structure.
-        pex->idh = malloc(sizeof(IMAGE_DOS_HEADER));
-        if(pex->idh == NULL)
-        {
-            return -1;
-        }
-
-        // Fill remaining structure data.
-        pex->filename     = filename;
-        pex->doshowless   = doshowless;
-        pex->supportcheck = supportcheck;
-        pex->arch         = IMAGE_X64;
-
-        // 
-        GetInfoOfPEExecutable(pex);
-
-        // Clearing resources.
-        free(pex->buffer);
-        free(pex->idh);
-        free(pex->inh.high);
-        free(pex);
-        return 0;
-    }
-
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 
 
-unsigned long long CheckFileSize(char* const filename)
+int CheckFileSize(char* const filename, unsigned long long* filesize)
 {
     // Get file size.
-    unsigned long long filesize = GetFileSize(filename);
-    if((filesize = GetFileSize(filename)) == 0)
+    if(GetFileSize(filename, filesize) == EXIT_FAILURE)
     {
-        return (unsigned long long)0;
+        return EXIT_FAILURE;
     }
 
     // If file size is less than NUMBER_OF_BYTES_IN_FILE exit.
-    if(filesize <= NUMBER_OF_BYTES_IN_FILE)
+    if((*filesize) <= NUMBER_OF_BYTES_IN_FILE)
     {
-        return (unsigned long long)0;
+        return EXIT_FAILURE;
     }
-    return filesize;
+
+    return EXIT_SUCCESS;
 }
 
 
 
-int CheckFileType(char* const filename, char* buffer)
+int DetermineFileType(char* const filename, char* buffer, int* filetype)
 {
     // Get file extension.
     int fileextension = 0;
-    if((fileextension = GetFileExtension(filename)) == -1)
+    if(GetFileExtension(filename, &fileextension) == EXIT_FAILURE)
     {
-        return -1;
+        return EXIT_FAILURE;
     }
 
     // Trying to figure out file type by file extension.
@@ -150,7 +178,8 @@ int CheckFileType(char* const filename, char* buffer)
     {
         // File extension unrecognized.
         case unrecognized:
-            return unrecognized;
+            (*filetype) = unrecognized;
+            return EXIT_SUCCESS;
 
         // File extension = .exe .
         case exe:
@@ -161,52 +190,74 @@ int CheckFileType(char* const filename, char* buffer)
 
             int peformat = DeterminePEFormat(buffer); // Trying to figure out whether file is x32 or x64.
 
-            if(peformat == -1) // DeterminePEFormat funtion error.
+            if(peformat == EXIT_FAILURE) // DeterminePEFormat funtion error.
             {
-                return -1;
+                return EXIT_FAILURE;
             }
             else if(peformat == IMAGE_PE_TYPE) // x32.
             {
-                return exec_pe;
+                (*filetype) = exec_pe;
+                return EXIT_SUCCESS;
             }
             else if(peformat == IMAGE_PEP_TYPE) // x64.
             {
-                return exec_pep;
+                (*filetype) = exec_pep;
+                return EXIT_SUCCESS;
             }
             break;
         
         // Plug to avoid errors.
         default:
-            return unrecognized;
+            (*filetype) = unrecognized;
+            return EXIT_SUCCESS;
     }
 
-    return unrecognized; // This return should not be reached.
+    // Fallback to default format detection.
+    if(bIsFilePEExecutable(buffer))
+    {
+        return (DeterminePEFormat(buffer) == IMAGE_PE_TYPE) ? ((*filetype) = exec_pe, EXIT_SUCCESS) : ((*filetype) = exec_pep, EXIT_SUCCESS); 
+    }
+
+    // This return should not be reached.
+    (*filetype) = unrecognized;
+    return EXIT_SUCCESS;
 }
 
 
 
-void GetInfoOfPEExecutable(PEExecutablesData* pex)
+void GetInfoOfPEExecutable(PEExecutablesData* pds)
 {
-    if(pex->arch == IMAGE_X32)
+    if(pds->arch == IMAGE_X32)
     {
-        pex->inh.low = malloc(sizeof(IMAGE_NT_HEADERS32));
-
-        FillOutNTEntireStructureLow(pex->idh, pex->inh.low, pex->buffer);
-
-        if(!pex->doshowless)
-        {
-            PrintHeadersDataLow(pex->idh, pex->inh.low, pex->buffer);
-        }
+        FillOutNTEntireStructureLow(&pds->idh, &pds->inh.low, pds->buffer);
     }
-    else if(pex->arch == IMAGE_X64)
+    else if(pds->arch == IMAGE_X64)
     {
-        pex->inh.high = malloc(sizeof(IMAGE_NT_HEADERS64));
-
-        FillOutNTEntireStructureHigh(pex->idh, pex->inh.high, pex->buffer);
-
-        if(!pex->doshowless)
-        {
-            PrintHeadersDataHigh(pex->idh, pex->inh.high, pex->buffer);
-        }
+        FillOutNTEntireStructureHigh(&pds->idh, &pds->inh.high, pds->buffer);
     }
+}
+
+
+
+void PrintInfoOfPEExecutable(PEExecutablesData* pds)
+{
+    if(pds->arch == IMAGE_X32)
+    {
+        PrintHeadersDataLow(&pds->idh, &pds->inh.low, pds->buffer);
+    }
+    else if(pds->arch == IMAGE_X64)
+    {
+        PrintHeadersDataHigh(&pds->idh, &pds->inh.high, pds->buffer);
+    }
+}
+
+
+
+bool bIsFileRecognizedExecutable(char* buffer)
+{
+    if(bIsFilePEExecutable(buffer))
+    {
+        return true;
+    }
+    return false;
 }
