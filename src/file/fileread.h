@@ -47,7 +47,7 @@ int ReadFileEntry(char* const filename, char* filebuffer);
  * 
  * @since 1.0.0
 */
-int ReadFile(char* const filename, char* filebuffer);
+int ReadFileInternal(char* const filename, char* filebuffer);
 
 
 

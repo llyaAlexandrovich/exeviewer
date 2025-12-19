@@ -69,7 +69,7 @@ int TryExecuteViewer(char* const filename, bool doshowless, bool supportcheck)
         return EXIT_FAILURE;
     }
 
-    if(ReadFile(pds.filename, pds.buffer) == EXIT_FAILURE)
+    if(ReadFileInternal(pds.filename, pds.buffer) == EXIT_FAILURE)
     {
         free(pds.buffer);
         return EXIT_FAILURE;

@@ -5,9 +5,9 @@
 #include <stdio.h>
 
 
-#include "../../types.h"
-#include "winexe_consts.h"
-#include "winexe_structures.h"
+#include "../../../types.h"
+#include "../winexe_consts.h"
+#include "../winexe_structures.h"
 
 
 

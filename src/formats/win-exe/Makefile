@@ -2,15 +2,15 @@ BUILDDIR := ../../../build/
 
 
 
-target : winexe winexefunctions winexe_struct_filler_functions
+target : winexe fill determine
 
 winexe : winexe.h winexe.c
 	$(GCC) -c -o $(BUILDDIR)winexe.$(OBJECTEXT) winexe.c
 
 
-winexefunctions : winexe_functions.h winexe_functions.c
-	$(GCC) -c -o $(BUILDDIR)winexefunctions.$(OBJECTEXT) winexe_functions.c
+fill : fill/fill.h fill/fill.c
+	$(GCC) -c -o $(BUILDDIR)fill.$(OBJECTEXT) fill/fill.c
 
 
-winexe_struct_filler_functions : winexe_struct_filler_functions.h winexe_struct_filler_functions.c
-	$(GCC) -c -o $(BUILDDIR)winexe_struct_filler_functions.$(OBJECTEXT) winexe_struct_filler_functions.c
+determine : determine/determine.h determine/determine.C
+	$(GCC) -c -o $(BUILDDIR)determine.$(OBJECTEXT) determine/determine.c

@@ -319,3 +319,20 @@ typedef struct _IMAGE_NT_HEADERS
     IMAGE_FILE_HEADER FileHeader;
     IMAGE_OPTIONAL_HEADER32 OptionalHeader;
 } IMAGE_NT_HEADERS32, *PIMAGE_NT_HEADERS32;
+
+
+/**
+ * Universal union for containing whether x32(IMAGE_NT_HEADERS32)
+ * or x64(IMAGE_NT_HEADERS64) structure.
+ * 
+ * @author Ilya Alexandrovich
+ * 
+ * @param inhLow  IMAGE_NT_HEADERS32 structure
+ * @param inhHigh  IMAGE_NT_HEADERS64 structure
+ * 
+ * @since 1.0.8
+ */
+typedef union _UNIVERSAL_IMAGE_HEADER{
+    IMAGE_NT_HEADERS32 inhLow;
+    IMAGE_NT_HEADERS64 inhHigh;
+} UNIVERSAL_IMAGE_HEADER;

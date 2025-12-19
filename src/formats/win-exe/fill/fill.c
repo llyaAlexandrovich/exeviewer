@@ -1,4 +1,4 @@
-#include "winexe_struct_filler_functions.h"
+#include "fill.h"
 
 
 
@@ -260,14 +260,14 @@ void FillOutNTDataDirectoryHeaderHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE
 
 
 
-void FillOutDataSectionLow(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS32* inh, IMAGE_SECTION_HEADER* ish)
-{
+// void FillOutDataSectionLow(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS32* inh, IMAGE_SECTION_HEADER* ish)
+// {
+// 
+// }
 
-}
 
 
-
-void FillOutDataSectionHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS64* inh, IMAGE_SECTION_HEADER* ish)
-{
-    
-}
+// void FillOutDataSectionHigh(IMAGE_DOS_HEADER* idh, char* buffer, IMAGE_NT_HEADERS64* inh, IMAGE_SECTION_HEADER* ish)
+// {
+//     
+// }
