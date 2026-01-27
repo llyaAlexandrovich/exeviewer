@@ -27,7 +27,7 @@ winexe :
 	$(MAKE) -C $(SUBDIRS)
 
 
-main : src/main.C
+main : src/main.c
 	$(GCC) -c -o build/main.$(OBJECTEXT) src/main.c
 
 
@@ -43,5 +43,5 @@ file : src/file/fileread.h src/file/fileread.c
 	$(GCC) -c -o build/file.$(OBJECTEXT) src/file/fileread.c
 
 
-benchmark : src/benchmark/benchmark.h src/benchmark/benchmark.C
-	$(GCC) -c -o build/benchmark.$(OBJECTEXT) src/benchmark/benchmark.C
+benchmark : src/benchmark/benchmark.h src/benchmark/benchmark.c
+	$(GCC) -c -o build/benchmark.$(OBJECTEXT) src/benchmark/benchmark.c

@@ -7,12 +7,12 @@
 
 
 
-#if defined _WIN32 || define _WIN64
+#if defined _WIN32 || defined _WIN64
 
 
 void InitializeClock()
 {
-    perfclocks = malloc(sizeof(PerfomanceClock) * NUMBER_OF_CLOCKS);
+    perfclocks = (PerfomanceClock*)malloc(sizeof(PerfomanceClock) * NUMBER_OF_CLOCKS);
 
     if(perfclocks == NULL)
     {
@@ -23,16 +23,16 @@ void InitializeClock()
 
 
 
-void StartClock(char* const clockname)
-{
-    short counter = 0;
-
-    // Search for free PerfomanceClock instance through
-    // perfclocks buffer.
-    for(; &perfclocks[counter] != NULL; ++counter);
-
-    
-}
+//void StartClock(char* const clockname)
+//{
+//    short counter = 0;
+//
+//    // Search for free PerfomanceClock instance through
+//    // perfclocks buffer.
+//    for(; &perfclocks[counter] != NULL; ++counter);
+//
+//    
+//}
 
 #else 
 

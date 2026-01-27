@@ -37,17 +37,17 @@
 
 
 // Windows-specific high-resolution time acquairing functions.
-#if defined _WIN32 || define _WIN64
+#if defined _WIN32 || defined _WIN64
 #include <Windows.h>
 #include <profileapi.h>
 
 
 
 // Number of clocks in code.
-#define NUMBER_OF_CLOCKS 0
+#define NUMBER_OF_CLOCKS 1
 
 // Before every perfomance clock call this macro should be used.
-// This helps to determine required number of preallocation. 
+// This helps to determine required number of preallocation.
 #define ADD_CLOCK() (++NUMBER_OF_CLOCKS)
 
 
@@ -64,8 +64,8 @@
  */
 typedef struct _PerfomanceClock
 {
-    LARGE_INTEGER counter;
-    char* clockname; 
+     LARGE_INTEGER counter;
+     char* clockname; 
 } PerfomanceClock;
 
 
