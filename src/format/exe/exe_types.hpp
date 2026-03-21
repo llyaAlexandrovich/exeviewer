@@ -2,14 +2,41 @@
 
 
 
+#include <iostream>
+
+
+
+
+// Windows-compatible types.
+// typedef unsigned char     BYTE;
+// typedef unsigned short    WORD;
+// typedef unsigned long     DWORD;
+// typedef unsigned __int64  DWORD_PTR;
+// typedef long              LONG;
+// typedef __int64           LONGLONG;
+// typedef unsigned __int64  ULONGLONG;
+// typedef unsigned __int64  ULONG_PTR;
+
+
+
+// Windows-compatible macros.
+// #define MAKEWORD(a,b) ((WORD) (((BYTE)  (((DWORD_PTR) (a)) & 0xff)) | ((WORD) ((BYTE) (((DWORD_PTR) (b)) & 0xff))) << 8))
+// #define MAKELONG(a,b) ((LONG) (((WORD)  (((DWORD_PTR) (a)) & 0xffff)) | ((DWORD) ((WORD) (((DWORD_PTR) (b)) & 0xffff))) << 16))
+// #define MAKELONGLONG(a,b)  ((LONGLONG)  ((((DWORD) (a)) & 0xffffffff) | (LONGLONG)((((DWORD) (b)) & 0xffffffff)) << 32))
+// #define MAKEULONGLONG(a,b) ((ULONGLONG) ((((DWORD) (a)) & 0xffffffff) | (ULONGLONG)((((DWORD) (b)) & 0xffffffff)) << 32))
+
+
 #define IMAGE_PE_TYPE                    0x10b  // PE
 #define IMAGE_PEP_TYPE                   0x20b  // PE+
 
 
+#define IMAGE_SIZEOF_DOS_HEADER          64
 #define IMAGE_SIZEOF_FILE_HEADER         20
 #define IMAGE_SIZEOF_SECTION_HEADER      40
 #define IMAGE_SIZEOF_OPTIONAL_HEADER32   96
 #define IMAGE_SIZEOF_OPTIONAL_HEADER64   112
+#define IMAGE_SIZEOF_HEADERS32           248
+#define IMAGE_SIZEOF_HEADERS64           264
 
 
 #define IMAGE_NUMBEROF_DIRECTORY_ENTRIES 16
